@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: airbnb
+    description: "Source data for Airbnb listings"
+    database: airbnb  # Change this if your database is named differently
+    schema: raw       # Adjust if your schema differs
+    tables:
+      - name: listings
+        description: "Raw Airbnb listings data"
+
+      - name: calendar
+        description: "Raw calendar data with pricing and availability"
+
+      - name: reviews
+        description: "Raw reviews data for listings"

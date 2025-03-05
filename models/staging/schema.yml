@@ -1,0 +1,222 @@
+models:
+  - name: src_listings
+    description: The src_listings model is a transformation of the raw_listings table from the airbnb.raw schema. It includes columns for listing_id, listing_name, host_id, host_name, price, neighbourhood, latitude, longitude, room_type, minimum_nights, number_of_reviews, last_review, reviews_per_month, calculated_host_listings_count, availability_365, and number_of_reviews_ltm. This model is used to provide a clean and structured view of the raw listings data.
+  - name: stg_listings
+    description: The stg_listings model is a transformation of the raw listings data from the Airbnb source. It includes fields such as listing_id, host_id, neighbourhood_cleansed, latitude, longitude, property_type, room_type, accommodates, bedrooms, beds, price_numeric, availability_30, availability_60, availability_90, availability_365, review_scores_rating, reviews_per_month, host_total_listings_count, minimum_nights, maximum_nights, calendar_last_scraped, and last_scraped. The model also joins with the stg_calendar model to include the most recent update date for each listing.
+    columns:
+      - name: listing_id
+        description: Unique identifier for each listing. This is a primary key in the stg_listings model.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: host_id
+        description: Unique identifier for each host. This is used to link listings to their respective hosts.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: neighbourhood_cleansed
+        description: The cleansed neighborhood name where the listing is located. This field has been cleaned and standardized for consistency across listings.
+        data_type: varchar
+        tests:
+          - not_null
+
+      - name: latitude
+        description: This column represents the latitude of the property listed on Airbnb. It is a numerical value that indicates the north-south position of a point on the Earth's surface.
+        data_type: float
+        tests:
+          - not_null
+
+      - name: longitude
+        description: This column represents the longitude of the property listed on Airbnb. It is a numerical value that indicates the east-west position of a point on the Earth's surface.
+        data_type: float
+        tests:
+          - not_null
+
+      - name: property_type
+        description: This column represents the type of property listed on Airbnb. It is a categorical value that describes the kind of property, such as 'Apartment', 'House', 'Condo', etc.
+        data_type: varchar
+        tests:
+          - not_null
+
+      - name: room_type
+        description: The type of room that is being listed. This can include options such as 'Entire home/apt', 'Private room', or 'Shared room'.
+        data_type: varchar
+        tests:
+          - not_null
+
+      - name: accommodates
+        description: The number of people the listing can accommodate. This is determined by the host and can range from 1 to 16+.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: bedrooms
+        description: The number of bedrooms included in the listing. This is determined by the host and can range from 0 (studio) to 10+.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: beds
+        description: The 'BEDS' column represents the number of beds available in the listed property. This is a numeric value.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: price_numeric
+        description: The 'PRICE_NUMERIC' column represents the price of the listed property. The original 'price' column from the raw data has been cleaned and transformed into a numeric value by removing the dollar sign ('$').
+        data_type: float
+        tests:
+          - not_null
+
+      - name: availability_30
+        description: The 'AVAILABILITY_30' column represents the number of days the listed property is available for booking in the next 30 days. This is a numeric value.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: availability_60
+        description: This column represents the number of days the listing is available for booking in the next 60 days.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: availability_90
+        description: This column represents the number of days the listing is available for booking in the next 90 days.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: availability_365
+        description: This column represents the number of days the listing is available for booking in the next 365 days.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: review_scores_rating
+        description: This column represents the average rating score given by guests to the listing. The score is based on a scale of 0 to 100, with 100 being the highest possible score.
+        data_type: float
+        tests:
+          - not_null
+
+      - name: reviews_per_month
+        description: This column represents the average number of reviews received by the listing per month. This is calculated by dividing the total number of reviews by the number of months the listing has been active.
+        data_type: float
+        tests:
+          - not_null
+
+      - name: host_total_listings_count
+        description: This column represents the total number of active listings that the host has on Airbnb. This includes all types of properties and locations.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: minimum_nights
+        description: The minimum number of nights a guest can book a stay for in the listing. This is a numeric value.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: maximum_nights
+        description: The maximum number of nights a guest can book a stay for in the listing. This is a numeric value.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: calendar_last_scraped
+        description: The date when the listing's availability calendar was last scraped. This is a date value.
+        data_type: date
+        tests:
+          - not_null
+
+      - name: last_scraped
+        description: The date when the data for the listing was last scraped from the Airbnb website. This field is in date format (YYYY-MM-DD).
+        data_type: date
+        tests:
+          - not_null
+
+      - name: updated_date
+        description: The most recent date when the listing's calendar was updated. This field is derived from the stg_calendar table and is also in date format (YYYY-MM-DD).
+        data_type: date
+        tests:
+          - not_null
+
+  - name: stg_calendar
+    description: "The stg_calendar model is a staging model that represents the calendar data from the Airbnb raw data source. It contains information about the availability and pricing of listings for specific dates. The model includes the following columns: LISTING_ID, DATE, AVAILABLE, PRICE_NUMERIC, ADJUSTED_PRICE_NUMERIC, MINIMUM_NIGHTS, and MAXIMUM_NIGHTS. The PRICE_NUMERIC and ADJUSTED_PRICE_NUMERIC columns are derived from the price and adjusted_price columns in the raw data, respectively, with the dollar sign removed and the value cast to a float."
+    columns:
+      - name: listing_id
+        description: The unique identifier for each listing in the Airbnb database.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: date
+        description: The date for which the availability and price details are provided.
+        data_type: date
+        tests:
+          - not_null
+
+      - name: available
+        description: Indicates whether the listing is available for the given date. The value is either 't' for available or 'f' for not available.
+        data_type: boolean
+        tests:
+          - not_null
+
+      - name: price_numeric
+        description: This column represents the original price of the listing. The price is converted to a numeric value by removing the dollar sign ('$') from the original price string.
+        data_type: float
+        tests:
+          - not_null
+
+      - name: adjusted_price_numeric
+        description: This column represents the adjusted price of the listing. The adjusted price is converted to a numeric value by removing the dollar sign ('$') from the original adjusted price string.
+        data_type: float
+        tests:
+          - not_null
+
+      - name: minimum_nights
+        description: This column represents the minimum number of nights a guest can book the listing for.
+        data_type: number
+        tests:
+          - not_null
+
+      - name: maximum_nights
+        description: This column represents the maximum number of nights a guest can stay at the listed Airbnb property. It is extracted from the 'calendar' table in the 'airbnb.raw' database.
+        data_type: number
+        tests:
+          - not_null
+
+  - name: stg_reviews
+    description: "The stg_reviews model is a staging model that extracts data from the raw.reviews table in the airbnb database. It includes the following columns: LISTING_ID, DATE, REVIEWER_ID, REVIEWER_NAME, and COMMENTS. The LISTING_ID is a numerical identifier for the listing. The DATE is the date the review was made. The REVIEWER_ID is a numerical identifier for the reviewer. The REVIEWER_NAME is the name of the reviewer. The COMMENTS column contains the text of the review. The model filters out any records where the COMMENTS field is null."
+    columns:
+      - name: listing_id
+        data_type: number
+        description: The unique identifier for each listing. This is a numeric field.
+        tests:
+          - not_null
+          
+      - name: date
+        data_type: date
+        description: The date when the review was made. This is a date field in the format YYYY-MM-DD.
+        tests:
+          - not_null
+
+      - name: reviewer_id
+        data_type: number
+        description: The unique identifier for each reviewer. This is a numeric field.
+        tests:
+          - not_null
+
+      - name: reviewer_name
+        data_type: varchar
+        description: The name of the individual who provided the review. This is a string field and can contain any characters.
+        tests:
+          - not_null
+
+      - name: comments
+        data_type: varchar
+        description: The text of the review provided by the reviewer. This is a string field and can contain any characters.
+        tests:
+          - not_null
+
