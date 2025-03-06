@@ -9,6 +9,7 @@ models:
         data_type: number
         tests:
           - not_null
+          - unique
 
       - name: host_id
         description: Unique identifier for each host. This is used to link listings to their respective hosts.
@@ -26,13 +27,19 @@ models:
         description: This column represents the latitude of the property listed on Airbnb. It is a numerical value that indicates the north-south position of a point on the Earth's surface.
         data_type: float
         tests:
-          - not_null
+          - not_null 
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -90
+              max_value: 90
 
       - name: longitude
         description: This column represents the longitude of the property listed on Airbnb. It is a numerical value that indicates the east-west position of a point on the Earth's surface.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -180
+              max_value: 180
 
       - name: property_type
         description: This column represents the type of property listed on Airbnb. It is a categorical value that describes the kind of property, such as 'Apartment', 'House', 'Condo', etc.
@@ -45,6 +52,9 @@ models:
         data_type: varchar
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']
+                
 
       - name: accommodates
         description: The number of people the listing can accommodate. This is determined by the host and can range from 1 to 16+.
@@ -117,12 +127,16 @@ models:
         data_type: number
         tests:
           - not_null
-
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+        
       - name: maximum_nights
         description: The maximum number of nights a guest can book a stay for in the listing. This is a numeric value.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
 
       - name: calendar_last_scraped
         description: The date when the listing's availability calendar was last scraped. This is a date value.
@@ -141,19 +155,23 @@ models:
         data_type: date
         tests:
           - not_null
+
       - name: price
         description: This column represents the price of the listing. It is derived from the 'price' column in the raw data, where any dollar sign ($) is removed and the remaining value is cast to a float. If the original value is null or cannot be cast to a float, it is replaced with 0.
         data_type: float
+
       - name: host_name
         description: This column represents the name of the host of the Airbnb listing. It is a string data type.
         data_type: varchar
         tests:
           - not_null
+
       - name: host_response_rate
         description: This column represents the response rate of the host. It is a measure of how often the host responds to messages or inquiries from guests. The value is stored as a string and can be interpreted as a percentage.
         data_type: varchar
         tests:
           - not_null
+
       - name: host_is_superhost
         data_type: boolean
         description: A boolean field indicating whether the host is a superhost or not. Superhosts are experienced hosts who provide a shining example for other hosts, and extraordinary experiences for their guests.
@@ -168,6 +186,7 @@ models:
         data_type: number
         tests:
           - not_null
+
 
       - name: date
         description: The date for which the availability and price details are provided.
@@ -186,25 +205,32 @@ models:
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
 
       - name: adjusted_price
         description: This column represents the adjusted price of the listing. The adjusted price is converted to a numeric value by removing the dollar sign ('$') from the original adjusted price string.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
 
       - name: minimum_nights
         description: This column represents the minimum number of nights a guest can book the listing for.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
 
       - name: maximum_nights
         description: This column represents the maximum number of nights a guest can stay at the listed Airbnb property. It is extracted from the 'calendar' table in the 'airbnb.raw' database.
         data_type: number
         tests:
           - not_null
-
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
   - name: stg_reviews
     description: "The stg_reviews model is a staging model that extracts data from the raw.reviews table in the airbnb database. It includes the following columns: LISTING_ID, DATE, REVIEWER_ID, REVIEWER_NAME, and COMMENTS. The LISTING_ID is a numerical identifier for the listing. The DATE is the date the review was made. The REVIEWER_ID is a numerical identifier for the reviewer. The REVIEWER_NAME is the name of the reviewer. The COMMENTS column contains the text of the review. The model filters out any records where the COMMENTS field is null."
     columns:
@@ -231,9 +257,13 @@ models:
         description: The name of the individual who provided the review. This is a string field and can contain any characters.
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_not_match_regex:
+              regex: "^\\s*$"
 
       - name: comments
         data_type: varchar
         description: The text of the review provided by the reviewer. This is a string field and can contain any characters.
         tests:
           - not_null
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1
