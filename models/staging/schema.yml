@@ -64,8 +64,8 @@ models:
         tests:
           - not_null
 
-      - name: price_numeric
-        description: The 'PRICE_NUMERIC' column represents the price of the listed property. The original 'price' column from the raw data has been cleaned and transformed into a numeric value by removing the dollar sign ('$').
+      - name: price
+        description: This column represents the price of the listing. It is derived from the 'price' column in the raw data, where any dollar sign ($) is removed and the remaining value is cast to a float. If the original value is null or cannot be cast to a float, it is replaced with 0.
         data_type: float
         tests:
           - not_null
@@ -141,9 +141,27 @@ models:
         data_type: date
         tests:
           - not_null
+      - name: price
+        description: This column represents the price of the listing. It is derived from the 'price' column in the raw data, where any dollar sign ($) is removed and the remaining value is cast to a float. If the original value is null or cannot be cast to a float, it is replaced with 0.
+        data_type: float
+      - name: host_name
+        description: This column represents the name of the host of the Airbnb listing. It is a string data type.
+        data_type: varchar
+        tests:
+          - not_null
+      - name: host_response_rate
+        description: This column represents the response rate of the host. It is a measure of how often the host responds to messages or inquiries from guests. The value is stored as a string and can be interpreted as a percentage.
+        data_type: varchar
+        tests:
+          - not_null
+      - name: host_is_superhost
+        data_type: boolean
+        description: A boolean field indicating whether the host is a superhost or not. Superhosts are experienced hosts who provide a shining example for other hosts, and extraordinary experiences for their guests.
+        tests:
+          - not_null
 
   - name: stg_calendar
-    description: "The stg_calendar model is a staging model that represents the calendar data from the Airbnb raw data source. It contains information about the availability and pricing of listings for specific dates. The model includes the following columns: LISTING_ID, DATE, AVAILABLE, PRICE_NUMERIC, ADJUSTED_PRICE_NUMERIC, MINIMUM_NIGHTS, and MAXIMUM_NIGHTS. The PRICE_NUMERIC and ADJUSTED_PRICE_NUMERIC columns are derived from the price and adjusted_price columns in the raw data, respectively, with the dollar sign removed and the value cast to a float."
+    description: "The stg_calendar model is a staging model that represents the calendar data from the Airbnb raw data source. It contains information about the availability and pricing of listings for specific dates. The model includes the following columns: LISTING_ID, DATE, AVAILABLE, PRICE, ADJUSTED_PRICE, MINIMUM_NIGHTS, and MAXIMUM_NIGHTS. The PRICE and ADJUSTED_PRICE columns are derived from the price and adjusted_price columns in the raw data, respectively, with the dollar sign removed and the value cast to a float."
     columns:
       - name: listing_id
         description: The unique identifier for each listing in the Airbnb database.
@@ -163,13 +181,13 @@ models:
         tests:
           - not_null
 
-      - name: price_numeric
+      - name: price
         description: This column represents the original price of the listing. The price is converted to a numeric value by removing the dollar sign ('$') from the original price string.
         data_type: float
         tests:
           - not_null
 
-      - name: adjusted_price_numeric
+      - name: adjusted_price
         description: This column represents the adjusted price of the listing. The adjusted price is converted to a numeric value by removing the dollar sign ('$') from the original adjusted price string.
         data_type: float
         tests:
@@ -195,7 +213,7 @@ models:
         description: The unique identifier for each listing. This is a numeric field.
         tests:
           - not_null
-          
+
       - name: date
         data_type: date
         description: The date when the review was made. This is a date field in the format YYYY-MM-DD.
@@ -219,4 +237,3 @@ models:
         description: The text of the review provided by the reviewer. This is a string field and can contain any characters.
         tests:
           - not_null
-

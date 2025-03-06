@@ -7,6 +7,9 @@ WITH base AS (
     SELECT
         id AS listing_id,
         host_id,
+        COALESCE(host_name, 'Unknown Host') AS host_name,
+        COALESCE(host_is_superhost, 'N') AS host_is_superhost,
+        COALESCE(NULLIF(TRY_CAST(REPLACE(host_response_rate, '%', '') AS FLOAT), NULL),0) AS host_response_rate,
         neighbourhood_cleansed,
         latitude,
         longitude,
@@ -15,7 +18,7 @@ WITH base AS (
         accommodates,
         COALESCE(bedrooms, 0) AS bedrooms,
         COALESCE(beds, 0) AS beds, 
-        COALESCE(NULLIF(TRY_CAST(REPLACE(price, '$', '') AS FLOAT), NULL), 0) AS price_numeric,
+        COALESCE(NULLIF(TRY_CAST(REPLACE(price, '$', '') AS FLOAT), NULL), 0) AS price,
         availability_30,
         availability_60,
         availability_90,
