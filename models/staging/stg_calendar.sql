@@ -1,3 +1,8 @@
+{{
+    config(
+        materialized='table'
+    )
+}}
 SELECT
     listing_id,
     date,

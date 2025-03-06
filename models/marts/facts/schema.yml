@@ -1,0 +1,145 @@
+models:
+  - name: fact_bookings
+    description: The 'fact_bookings' model is a fact table that aggregates booking data from the 'stg_calendar' staging table and joins it with the 'dim_listings' dimension table. It provides a comprehensive view of each listing's booking information, including the total number of days, total available days, total booked days, average price per night, average adjusted price per night, and total revenue. The model also calculates the occupancy rate for each listing, which is the ratio of total booked days to total days. The 'fact_bookings' model is useful for analyzing booking trends, pricing strategies, and revenue generation for each listing.
+    columns:
+      - name: listing_id
+        description: The unique identifier for each listing. This is a numeric value that is used to uniquely identify each listing in the Airbnb platform.
+        data_type: number
+        tests:
+          - not_null
+      - name: host_id
+        description: The unique identifier for each host. This is a numeric value that is used to uniquely identify each host in the Airbnb platform.
+        data_type: number
+        tests:
+          - not_null
+      - name: updated_date
+        description: The date when the listing was last updated. This is a date value that represents the most recent date when the listing information was updated.
+        data_type: date
+        tests:
+          - not_null
+      - name: total_days
+        description: This column represents the total number of days for which the booking data is available for a particular listing. It is calculated by counting the total number of records for each listing in the calendar data.
+        data_type: number
+        tests:
+          - not_null
+      - name: total_available_days
+        description: This column represents the total number of days a listing is available for booking. It is calculated by summing up the days where the 'available' field in the calendar data is marked as true ('t') for each listing.
+        data_type: number
+        tests:
+          - not_null
+      - name: total_booked_days
+        description: This column represents the total number of days a listing is booked. It is calculated by summing up the days where the 'available' field in the calendar data is marked as false ('f') for each listing.
+        data_type: number
+        tests:
+          - not_null
+      - name: occupancy_rate
+        description: The occupancy rate is calculated as the total number of booked days divided by the total number of days. It represents the proportion of days that a listing is occupied.
+        data_type: number
+        tests:
+          - not_null
+      - name: avg_price_per_night
+        description: The average price per night is calculated as the average of the price field from the calendar data for each listing. It represents the average listed price per night for a given listing.
+        data_type: float
+        tests:
+          - not_null
+      - name: avg_adjusted_price_per_night
+        description: The average adjusted price per night is calculated as the average of the adjusted price field from the calendar data for each listing. If the adjusted price is null or zero, the original price is used. It represents the average price per night for a given listing after any adjustments or discounts have been applied.
+        data_type: float
+        tests:
+          - not_null
+      - name: total_revenue
+        description: This column represents the total revenue generated from a specific listing. It is calculated by multiplying the total number of booked days by the average adjusted price per night for each listing.
+        data_type: float
+        tests:
+          - not_null
+  - name: fact_listings_performance
+    description: The 'fact_listings_performance' model combines data from the 'fact_bookings', 'dim_reviews', and 'dim_listings' tables. It provides a comprehensive view of each listing's performance, including booking details, review scores, and property details. The model includes metrics such as total booked days, total available days, occupancy rate, average price per night, average adjusted price per night, total revenue, review scores rating, and reviews per month. The model is designed to support analysis of listing performance on the Airbnb platform.
+    columns:
+      - name: listing_id
+        description: A unique identifier for each listing. This is a numeric field and is the primary key for the fact_listings_performance model.
+        data_type: number
+        data_tests:
+          - not_null
+      - name: host_id
+        description: A unique identifier for each host. This is a numeric field and is used to link the listing to the host who owns it.
+        data_type: number
+        data_tests:
+          - not_null
+      - name: property_type
+        description: The type of property being listed. This is a string field and can contain values such as 'Apartment', 'House', 'Condo', etc.
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: room_type
+        description: The type of room that is being listed. This can include values such as 'Private Room', 'Entire Home/Apt', etc.
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: total_booked_days
+        description: The total number of days that the listing has been booked. This is calculated by summing up all the days that the listing has been booked by guests.
+        data_type: number
+        data_tests:
+          - not_null
+      - name: total_available_days
+        description: The total number of days that the listing is available for booking. This is calculated by summing up all the days that the listing is available and not booked by guests.
+        data_type: number
+        data_tests:
+          - not_null
+      - name: occupancy_rate
+        description: The occupancy rate is a measure of the utilization of the listings. It is calculated as the total number of booked days divided by the total number of available days.
+        data_type: number
+        data_tests:
+          - not_null
+      - name: avg_price_per_night
+        description: The average price per night is the average cost for renting the listing for one night. This is calculated by dividing the total revenue by the total number of booked days.
+        data_type: float
+        data_tests:
+          - not_null
+      - name: avg_adjusted_price_per_night
+        description: The average adjusted price per night is a measure that takes into account any discounts or special offers that may have been applied. This is calculated by adjusting the average price per night based on any discounts or special offers.
+        data_type: float
+        data_tests:
+          - not_null
+      - name: total_revenue
+        description: This column represents the total revenue generated from a particular listing. It is calculated by multiplying the average price per night by the total number of booked days. The data type is float.
+        data_type: float
+        data_tests:
+          - not_null
+      - name: review_scores_rating
+        description: This column represents the average review score rating for a particular listing. It is calculated by taking the average of all review scores for a listing. The data type is float.
+        data_type: float
+        data_tests:
+          - not_null
+      - name: reviews_per_month
+        description: This column represents the average number of reviews received per month for a particular listing. It is calculated by dividing the total number of reviews by the number of months between the first and last review. The data type is number.
+        data_type: number
+        data_tests:
+          - not_null
+  - name: fact_pricing_trends
+    description: The 'fact_pricing_trends' model is designed to provide insights into the pricing trends of Airbnb listings. It calculates the daily final price for each listing, along with a 7-day and 30-day moving average price. The model uses data from the 'stg_calendar' table in the 'AIRBNB.DEV' database. The final output includes the 'listing_id', 'pricing_date', 'final_price', 'avg_price_7d', and 'avg_price_30d' columns.
+    columns:
+      - name: listing_id
+        description: This is a unique identifier for each listing. It is a numeric value that is used to distinguish each listing from one another.
+        data_type: number
+        data_tests:
+          - not_null
+      - name: pricing_date
+        description: This is the date when the price was recorded. It is stored in date format.
+        data_type: date
+        data_tests:
+          - not_null
+      - name: final_price
+        description: This is the final price of the listing for the given date. It is calculated by taking the adjusted price if it is not zero, otherwise, the original price is taken. It is stored as a float value.
+        data_type: float
+        data_tests:
+          - not_null
+      - name: avg_price_7d
+        description: This column represents the average price of a listing over the last 7 days, including the current day. The average is calculated using the final price of each day.
+        data_type: float
+        data_tests:
+          - not_null
+      - name: avg_price_30d
+        description: This column represents the average price of a listing over the last 30 days, including the current day. The average is calculated using the final price of each day.
+        data_type: float
+        data_tests:
+          - not_null
