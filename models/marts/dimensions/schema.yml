@@ -7,26 +7,39 @@ models:
         data_type: number
         tests:
           - not_null
+          - unique
+
       - name: host_name
         description: The name of the host. This is a string field.
         data_type: varchar
         tests:
           - not_null
+
       - name: total_listings
         description: The total number of listings that a host has. This is a numeric field.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
       - name: response_rate
         description: This column represents the response rate of the host. It is calculated by casting the host_response_rate to a decimal and dividing by 100. The value ranges from 0 to 1, where 1 indicates a 100% response rate.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 1
+
       - name: is_superhost
         description: This column indicates whether the host is a superhost or not. It is a boolean value, where 'true' means the host is a superhost and 'false' means the host is not a superhost. The value is derived from the host_is_superhost column in the source table, where 't' is mapped to true and any other value is mapped to false.
         data_type: boolean
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: [ true, false ]
+
   - name: dim_listings
     description: The dim_listings model is a dimension table that contains detailed information about Airbnb listings. It includes columns for the listing ID, host ID, cleansed neighborhood name, geographical coordinates (latitude and longitude), property type, room type, accommodation capacity, number of bedrooms and beds, price, minimum and maximum nights, and the date when the listing was last updated. The data is sourced from the stg_listings table in the AIRBNB.DEV schema.
     columns:
@@ -35,77 +48,110 @@ models:
         data_type: number
         tests:
           - not_null
+          - unique
+
       - name: host_id
         description: The unique identifier for each host in the Airbnb platform.
         data_type: number
         tests:
           - not_null
+
       - name: neighborhood
         description: The cleansed neighborhood name where the listing is located.
         data_type: varchar
         tests:
           - not_null
+
       - name: latitude
         description: The latitude coordinate of the property listed on Airbnb. This is a decimal number, where positive values indicate northern latitude and negative values indicate southern latitude.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -90
+              max_value: 90
+
       - name: longitude
         description: The longitude coordinate of the property listed on Airbnb. This is a decimal number, where positive values indicate eastern longitude and negative values indicate western longitude.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -180
+              max_value: 180
+
       - name: property_type
         description: The type of property listed on Airbnb. This is a string value that describes the kind of property, such as 'Apartment', 'House', 'Condo', etc.
         data_type: varchar
         tests:
           - not_null
+
       - name: room_type
         description: The type of room that is being listed. This can include values such as 'Entire home/apt', 'Private room', or 'Shared room'.
         data_type: varchar
         tests:
-          - not_null
           - accepted_values:
               values:
+                - Entire home/apt
+                - Hotel room
                 - Private room
                 - Shared room
-                - Hotel room
-                - Entire home/apt
+          - not_null
+
       - name: accommodates
         description: The number of people the listing can accommodate. This is determined by the host and can range from 1 to 16+.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+
       - name: bedrooms
         description: The number of bedrooms included in the listing. This is determined by the host and can range from 0 (for studio apartments) to 10+.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
       - name: beds
         description: The number of beds available in the listing. This is a numeric field.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0          
+
       - name: price
         description: The price per night for the listing. This is a numeric field.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
       - name: minimum_nights
         description: The minimum number of nights a guest can book the listing. This is a numeric field.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+
       - name: maximum_nights
         description: The maximum number of nights a guest can stay for the reservation
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+
       - name: updated_date
         description: The date when the listing information was last updated
         data_type: date
         tests:
           - not_null
+
   - name: dim_reviews
     description: The 'dim_reviews' model is a dimension table that contains aggregated review data for each listing. It includes the listing ID, the date of the first and last review, the total number of reviews, and the review score rating. The data is sourced from the 'stg_reviews' and 'stg_listings' tables in the AIRBNB.DEV schema. The 'stg_reviews' table provides the review dates and total review count, while the 'stg_listings' table provides the review score rating.
     columns:
@@ -114,21 +160,25 @@ models:
         data_type: number
         tests:
           - not_null
+
       - name: first_review
         description: The date of the first review for each listing. This is a date field.
         data_type: date
         tests:
           - not_null
+
       - name: last_review
         description: The date of the most recent review for each listing. This is a date field.
         data_type: date
         tests:
           - not_null
+
       - name: total_reviews
         description: This column represents the total number of reviews for a particular listing. It is calculated by counting the number of reviews for each listing_id in the stg_reviews table.
         data_type: number
         tests:
           - not_null
+
       - name: review_scores_rating
         description: This column represents the average review score rating for a particular listing. It is sourced from the review_scores_rating column in the stg_listings table.
         data_type: float
