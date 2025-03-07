@@ -5,7 +5,7 @@
 
 
 select maximum_nights
-from AIRBNB.DEV.stg_listings
+from AIRBNB.PROD.stg_listings
 where maximum_nights is null
 
 

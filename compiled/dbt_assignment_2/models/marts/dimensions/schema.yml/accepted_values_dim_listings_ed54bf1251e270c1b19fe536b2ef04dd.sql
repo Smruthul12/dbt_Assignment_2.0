@@ -8,7 +8,7 @@ with all_values as (
         room_type as value_field,
         count(*) as n_records
 
-    from AIRBNB.DEV.dim_listings
+    from AIRBNB.PROD.dim_listings
     group by room_type
 
 )

@@ -16,7 +16,7 @@
  as expression
 
 
-    from AIRBNB.DEV.fact_bookings
+    from AIRBNB.PROD.fact_bookings
     
 
 ),

@@ -17,7 +17,7 @@
  as expression
 
 
-    from AIRBNB.DEV.stg_reviews
+    from AIRBNB.PROD.stg_reviews
     
 
 ),

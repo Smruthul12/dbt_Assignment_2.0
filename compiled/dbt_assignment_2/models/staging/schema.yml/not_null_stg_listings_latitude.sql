@@ -5,7 +5,7 @@
 
 
 select latitude
-from AIRBNB.DEV.stg_listings
+from AIRBNB.PROD.stg_listings
 where latitude is null
 
 

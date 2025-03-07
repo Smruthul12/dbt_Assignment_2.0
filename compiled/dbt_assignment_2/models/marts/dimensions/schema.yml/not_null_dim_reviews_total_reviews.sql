@@ -5,7 +5,7 @@
 
 
 select total_reviews
-from AIRBNB.DEV.dim_reviews
+from AIRBNB.PROD.dim_reviews
 where total_reviews is null
 
 

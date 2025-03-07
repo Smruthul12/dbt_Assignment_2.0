@@ -5,7 +5,7 @@
 
 
 select total_days
-from AIRBNB.DEV.fact_bookings
+from AIRBNB.PROD.fact_bookings
 where total_days is null
 
 

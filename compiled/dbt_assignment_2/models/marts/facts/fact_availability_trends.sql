@@ -3,7 +3,7 @@ WITH calendar_data AS (
         listing_id,
         date AS availability_date,
         available
-    FROM AIRBNB.DEV.stg_calendar
+    FROM AIRBNB.PROD.stg_calendar
 ),
 
 aggregated_availability AS (
@@ -28,4 +28,4 @@ SELECT
     a.total_booked_days,
     a.occupancy_rate
 FROM aggregated_availability a
-JOIN AIRBNB.DEV.dim_listings l ON a.listing_id = l.listing_id
+JOIN AIRBNB.PROD.dim_listings l ON a.listing_id = l.listing_id

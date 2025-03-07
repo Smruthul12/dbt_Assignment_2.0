@@ -5,7 +5,7 @@
 
 
 select host_id
-from AIRBNB.DEV.dim_hosts
+from AIRBNB.PROD.dim_hosts
 where host_id is null
 
 

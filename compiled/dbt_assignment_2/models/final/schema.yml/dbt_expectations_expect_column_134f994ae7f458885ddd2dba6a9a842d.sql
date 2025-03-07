@@ -16,7 +16,7 @@
  as expression
 
 
-    from AIRBNB.DEV.final_airbnb_listings
+    from AIRBNB.PROD.final_airbnb_listings
     
 
 ),

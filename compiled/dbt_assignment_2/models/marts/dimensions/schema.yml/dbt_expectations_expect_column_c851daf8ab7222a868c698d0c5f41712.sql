@@ -5,7 +5,7 @@ with all_values as (
     select
         is_superhost as value_field
 
-    from AIRBNB.DEV.dim_hosts
+    from AIRBNB.PROD.dim_hosts
     
 
 ),

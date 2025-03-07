@@ -5,7 +5,7 @@
 
 
 select date
-from AIRBNB.DEV.stg_calendar
+from AIRBNB.PROD.stg_calendar
 where date is null
 
 

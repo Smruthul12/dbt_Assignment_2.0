@@ -5,7 +5,7 @@
 
 
 select comments
-from AIRBNB.DEV.stg_reviews
+from AIRBNB.PROD.stg_reviews
 where comments is null
 
 

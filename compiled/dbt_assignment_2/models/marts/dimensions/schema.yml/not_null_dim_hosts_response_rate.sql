@@ -5,7 +5,7 @@
 
 
 select response_rate
-from AIRBNB.DEV.dim_hosts
+from AIRBNB.PROD.dim_hosts
 where response_rate is null
 
 

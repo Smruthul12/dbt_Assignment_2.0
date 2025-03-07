@@ -5,7 +5,7 @@ with all_values as (
     select
         room_type as value_field
 
-    from AIRBNB.DEV.final_airbnb_listings
+    from AIRBNB.PROD.final_airbnb_listings
     
 
 ),

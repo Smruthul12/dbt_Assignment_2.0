@@ -5,7 +5,7 @@
 
 
 select listing_id
-from AIRBNB.DEV.stg_listings
+from AIRBNB.PROD.stg_listings
 where listing_id is null
 
 

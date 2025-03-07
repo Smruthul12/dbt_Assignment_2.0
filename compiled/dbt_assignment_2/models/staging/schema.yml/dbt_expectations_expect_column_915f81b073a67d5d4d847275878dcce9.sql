@@ -19,7 +19,7 @@ regexp_instr(reviewer_name, '^\s*$', 1, 1, 0, '')
  as expression
 
 
-    from AIRBNB.DEV.stg_reviews
+    from AIRBNB.PROD.stg_reviews
     
 
 ),

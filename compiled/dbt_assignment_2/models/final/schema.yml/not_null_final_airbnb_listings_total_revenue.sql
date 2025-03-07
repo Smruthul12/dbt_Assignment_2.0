@@ -5,7 +5,7 @@
 
 
 select total_revenue
-from AIRBNB.DEV.final_airbnb_listings
+from AIRBNB.PROD.final_airbnb_listings
 where total_revenue is null
 
 

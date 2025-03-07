@@ -5,7 +5,7 @@
 
 
 select available
-from AIRBNB.DEV.stg_calendar
+from AIRBNB.PROD.stg_calendar
 where available is null
 
 

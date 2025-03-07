@@ -16,7 +16,7 @@ WITH listings AS (
         minimum_nights,
         maximum_nights,
         updated_date
-    FROM AIRBNB.DEV.dim_listings
+    FROM AIRBNB.PROD.dim_listings
 ),
 
 bookings AS (
@@ -29,7 +29,7 @@ bookings AS (
         avg_price_per_night,
         avg_adjusted_price_per_night,
         total_revenue
-    FROM AIRBNB.DEV.fact_bookings
+    FROM AIRBNB.PROD.fact_bookings
 ),
 
 pricing AS (
@@ -37,7 +37,7 @@ pricing AS (
         listing_id,
         AVG(avg_price_7d) AS avg_price_trend_7d,
         AVG(avg_price_30d) AS avg_price_trend_30d
-    FROM AIRBNB.DEV.fact_pricing_trends
+    FROM AIRBNB.PROD.fact_pricing_trends
     GROUP BY listing_id
 ),
 
@@ -46,7 +46,7 @@ availability AS (
         listing_id,
         MAX(availability_date) AS last_updated_date,
         AVG(total_available_days) AS avg_available_days
-    FROM AIRBNB.DEV.fact_availability_trends
+    FROM AIRBNB.PROD.fact_availability_trends
     GROUP BY listing_id
 )
 

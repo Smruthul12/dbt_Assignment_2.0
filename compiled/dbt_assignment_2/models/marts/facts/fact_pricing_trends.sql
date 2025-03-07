@@ -3,7 +3,7 @@ WITH daily_prices AS (
         listing_id,
         date AS pricing_date,
         COALESCE(NULLIF(adjusted_price, 0), price) AS final_price
-    FROM AIRBNB.DEV.stg_calendar
+    FROM AIRBNB.PROD.stg_calendar
     
 ),
 price_trends AS (

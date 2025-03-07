@@ -5,7 +5,7 @@
 
 
 select updated_date
-from AIRBNB.DEV.dim_listings
+from AIRBNB.PROD.dim_listings
 where updated_date is null
 
 

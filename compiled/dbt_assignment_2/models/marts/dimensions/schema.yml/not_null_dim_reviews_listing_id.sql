@@ -5,7 +5,7 @@
 
 
 select listing_id
-from AIRBNB.DEV.dim_reviews
+from AIRBNB.PROD.dim_reviews
 where listing_id is null
 
 

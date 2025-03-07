@@ -33,7 +33,7 @@ calendar_update AS (
     SELECT
         listing_id,
         MAX(date) AS updated_date
-    FROM AIRBNB.DEV.stg_calendar
+    FROM AIRBNB.PROD.stg_calendar
     GROUP BY listing_id
 )
 

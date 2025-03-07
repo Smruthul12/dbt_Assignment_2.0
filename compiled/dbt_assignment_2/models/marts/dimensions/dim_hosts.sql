@@ -7,5 +7,5 @@ SELECT
         WHEN host_is_superhost = 't' THEN TRUE 
         ELSE FALSE 
     END AS is_superhost
-FROM AIRBNB.DEV.stg_listings
+FROM AIRBNB.PROD.stg_listings
 GROUP BY 1, 2, 3, 4, 5

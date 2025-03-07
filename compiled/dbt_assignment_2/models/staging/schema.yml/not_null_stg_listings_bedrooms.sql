@@ -5,7 +5,7 @@
 
 
 select bedrooms
-from AIRBNB.DEV.stg_listings
+from AIRBNB.PROD.stg_listings
 where bedrooms is null
 
 

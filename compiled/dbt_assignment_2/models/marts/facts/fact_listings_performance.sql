@@ -7,7 +7,7 @@ WITH bookings AS (
         avg_price_per_night,
         avg_adjusted_price_per_night,
         total_revenue
-    FROM AIRBNB.DEV.fact_bookings
+    FROM AIRBNB.PROD.fact_bookings
 ),
 reviews AS (
     SELECT 
@@ -20,7 +20,7 @@ reviews AS (
             WHEN DATEDIFF(MONTH, MIN(first_review), MAX(last_review)) = 0 THEN COUNT(*)
             ELSE ROUND(COUNT(*) / NULLIF(DATEDIFF(MONTH, MIN(first_review), MAX(last_review)), 0), 2)
         END AS reviews_per_month
-    FROM AIRBNB.DEV.dim_reviews
+    FROM AIRBNB.PROD.dim_reviews
     GROUP BY listing_id
 )
 SELECT 
@@ -37,5 +37,5 @@ SELECT
     COALESCE(r.review_scores_rating, 0) AS review_scores_rating,  
     COALESCE(r.reviews_per_month, 0) AS reviews_per_month
 FROM bookings b
-JOIN AIRBNB.DEV.dim_listings l ON b.listing_id = l.listing_id
+JOIN AIRBNB.PROD.dim_listings l ON b.listing_id = l.listing_id
 LEFT JOIN reviews r ON b.listing_id = r.listing_id

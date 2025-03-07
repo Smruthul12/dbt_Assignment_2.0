@@ -5,7 +5,7 @@ WITH calendar_data AS (
         available,
         price,
         adjusted_price
-    FROM AIRBNB.DEV.stg_calendar
+    FROM AIRBNB.PROD.stg_calendar
 ),
 aggregated_bookings AS (
     SELECT
@@ -33,4 +33,4 @@ SELECT
     ab.avg_adjusted_price_per_night,
     (ab.total_booked_days * ab.avg_adjusted_price_per_night) AS total_revenue
 FROM aggregated_bookings ab
-JOIN AIRBNB.DEV.dim_listings dl ON ab.listing_id = dl.listing_id
+JOIN AIRBNB.PROD.dim_listings dl ON ab.listing_id = dl.listing_id

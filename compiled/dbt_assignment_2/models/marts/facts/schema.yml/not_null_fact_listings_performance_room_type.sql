@@ -5,7 +5,7 @@
 
 
 select room_type
-from AIRBNB.DEV.fact_listings_performance
+from AIRBNB.PROD.fact_listings_performance
 where room_type is null
 
 

@@ -5,7 +5,7 @@
 
 
 select accommodates
-from AIRBNB.DEV.dim_listings
+from AIRBNB.PROD.dim_listings
 where accommodates is null
 
 

@@ -13,4 +13,4 @@ SELECT
     minimum_nights,
     maximum_nights,
     updated_date
-FROM AIRBNB.DEV.stg_listings
+FROM AIRBNB.PROD.stg_listings

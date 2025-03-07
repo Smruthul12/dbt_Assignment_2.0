@@ -16,7 +16,7 @@
  as expression
 
 
-    from AIRBNB.DEV.dim_hosts
+    from AIRBNB.PROD.dim_hosts
     
 
 ),

@@ -5,7 +5,7 @@
 
 
 select beds
-from AIRBNB.DEV.final_airbnb_listings
+from AIRBNB.PROD.final_airbnb_listings
 where beds is null
 
 

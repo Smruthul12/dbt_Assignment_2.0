@@ -5,7 +5,7 @@
 
 
 select beds
-from AIRBNB.DEV.dim_listings
+from AIRBNB.PROD.dim_listings
 where beds is null
 
 
