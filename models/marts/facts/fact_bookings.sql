@@ -1,3 +1,11 @@
+{{ 
+    config(
+        materialized='incremental',
+        unique_key='listing_id',
+        incremental_strategy='merge'
+    ) 
+}}
+
 WITH calendar_data AS (
     SELECT
         listing_id,
@@ -6,7 +14,13 @@ WITH calendar_data AS (
         price,
         adjusted_price
     FROM {{ ref('stg_calendar') }}
+    
+    {% if is_incremental() %}
+    -- Only fetch new or updated records
+    WHERE date >= (SELECT MAX(updated_date) FROM {{ this }})
+    {% endif %}
 ),
+
 aggregated_bookings AS (
     SELECT
         listing_id,
@@ -21,6 +35,7 @@ aggregated_bookings AS (
     FROM calendar_data
     GROUP BY listing_id
 )
+
 SELECT
     ab.listing_id,
     dl.host_id,

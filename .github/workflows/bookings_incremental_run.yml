@@ -1,0 +1,35 @@
+ 
+name: dbt Incremental Run
+
+on:
+  schedule:
+    - cron: "0 2 * * *" 
+  workflow_dispatch:  
+
+jobs:
+  dbt-incremental-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dbt & Snowflake Adapter
+        run: |
+          pip install dbt-core dbt-snowflake
+
+      - name: Configure dbt Profiles
+        run: |
+          mkdir -p ~/.dbt
+          echo "${{ secrets.DBT_PROFILES }}" > ~/.dbt/profiles.yml
+
+      - name: Install DBT Dependencies  
+        run: dbt deps
+        
+      - name: Run dbt Incremental Models
+        run: dbt run --select facts_bookings
