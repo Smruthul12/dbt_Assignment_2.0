@@ -1,0 +1,17 @@
+version: 2
+
+exposures:
+  - name: AIRBNB DASHBOARD
+    label: Airbnb Dashboard
+    type: Dashboard
+    maturity: low
+    url: https://lookerstudio.google.com/reporting/81d4728e-6241-4089-a9d2-26e78e86d21e
+    description: Executive Dashboard about Online Retail Store
+      
+
+    depends_on:
+      - ref('final_airbnb_listings')
+
+    owner:
+      name: Smruthul M S
+      email: msmruthul2002@gmail.com
