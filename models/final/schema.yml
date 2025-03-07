@@ -7,123 +7,188 @@ models:
         data_type: number
         tests:
           - not_null
+          - unique
+
       - name: host_id
         description: A unique identifier for each host. This is a numeric field.
         data_type: number
         tests:
           - not_null
+
       - name: neighborhood
         description: The neighborhood where the listing is located. This is a string field.
         data_type: varchar
         tests:
           - not_null
+
       - name: latitude
         description: This column represents the latitude of the Airbnb property. It is a float type data, which means it can contain decimal points. Latitude is a geographic coordinate that specifies the north-south position of a point on the Earth's surface.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -90
+              max_value: 90
+
       - name: longitude
         description: This column represents the longitude of the Airbnb property. It is also a float type data, which means it can contain decimal points. Longitude is a geographic coordinate that specifies the east-west position of a point on the Earth's surface.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -180
+              max_value: 180
+
       - name: property_type
         description: This column represents the type of the Airbnb property. It is a varchar type data, which means it can contain alphanumeric characters. The property type can be various types like Apartment, House, Condominium, Loft, Townhouse, etc.
         data_type: varchar
         tests:
           - not_null
+
       - name: room_type
         description: The type of room that is being listed. This can include values such as 'Entire home/apt', 'Private room', or 'Shared room'.
         data_type: varchar
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']
+
       - name: accommodates
         description: The number of people the listing can accommodate. This is determined by the host and can range from 1 to 16+.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
       - name: bedrooms
         description: The number of bedrooms included in the listing. This is determined by the host and can range from 0 (for studio apartments) to 10+.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
       - name: beds
         description: The 'BEDS' column represents the number of beds available in the Airbnb listing. This is a numeric field.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
       - name: price
         description: The 'PRICE' column represents the price per night for the Airbnb listing. This is a float field, allowing for decimal values to represent cents.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
       - name: minimum_nights
         description: The 'MINIMUM_NIGHTS' column represents the minimum number of nights a guest can book the Airbnb listing for. This is a numeric field.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+
       - name: maximum_nights
         description: This column represents the maximum number of nights a guest can stay at the Airbnb listing. It is a numeric field.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+
       - name: updated_date
         description: This column represents the date when the listing was last updated. It is a date field in the format YYYY-MM-DD.
         data_type: date
         tests:
           - not_null
+          
       - name: total_days
         description: This column represents the total number of days the Airbnb listing has been available for booking. It is a numeric field.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+
       - name: total_available_days
         description: This column represents the total number of days that the listing is available for booking. It is calculated by subtracting the total booked days from the total days in the period under consideration.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
       - name: total_booked_days
         description: This column represents the total number of days that the listing has been booked. It is calculated by counting the number of days between the first and last booking dates for each listing.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
       - name: occupancy_rate
         description: This column represents the occupancy rate of the listing. It is calculated by dividing the total booked days by the total available days, and then multiplying by 100 to get the percentage. A higher occupancy rate indicates that the listing is more popular and frequently booked.
         data_type: number
         tests:
           - not_null
+
       - name: avg_price_per_night
         description: This column represents the average price per night for a specific listing. It is calculated by dividing the total revenue by the total number of booked days. The value is a float and can be zero if there are no bookings for the listing.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
       - name: avg_adjusted_price_per_night
         description: This column represents the average adjusted price per night for a specific listing. The adjusted price takes into account any discounts or promotions that may have been applied. It is calculated by dividing the total adjusted revenue by the total number of booked days. The value is a float and can be zero if there are no bookings for the listing.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
       - name: total_revenue
         description: This column represents the total revenue generated by a specific listing. It is calculated by multiplying the average price per night by the total number of booked days. The value is a float and can be zero if there are no bookings for the listing.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
       - name: avg_price_trend_7d
         description: This column represents the average price trend over the last 7 days for a specific listing. It is calculated by taking the average of the daily prices for the past 7 days.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
       - name: avg_price_trend_30d
         description: This column represents the average price trend over the last 30 days for a specific listing. It is calculated by taking the average of the daily prices for the past 30 days.
         data_type: float
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
       - name: last_updated_date
         description: This column represents the last date when the availability information for a specific listing was updated. If no update was made, the current date is used.
         data_type: date
         tests:
           - not_null
+
       - name: avg_available_days
         description: This column represents the average number of days a listing is available for booking. It is calculated by taking the average of the 'total_available_days' for each listing from the 'fact_availability_trends' table in the AIRBNB.DEV database.
         data_type: number
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              
+
