@@ -1,3 +1,9 @@
+{{
+    config(
+        materialized='table'
+    )
+}}
+
 WITH review_stats AS (
     SELECT
         listing_id,

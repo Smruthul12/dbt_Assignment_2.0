@@ -1,3 +1,10 @@
+{{
+    config(
+        materialized='view',
+        cluster_by=['listing_id']
+    )
+}}
+
 SELECT
     listing_id,
     host_id,
