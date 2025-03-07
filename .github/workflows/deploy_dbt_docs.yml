@@ -1,0 +1,44 @@
+name: Deploy dbt Docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+
+    - name: Install dbt & Snowflake Adapter
+      run: |
+        pip install dbt-core dbt-snowflake
+
+    - name: Configure dbt Profiles
+      run: |
+        mkdir -p ~/.dbt
+        echo "${{ secrets.DBT_PROFILES }}" > ~/.dbt/profiles.yml
+
+    - name: Validate dbt Connection
+      run: dbt debug --target dev
+
+    - name: Install dbt Dependencies
+      run: dbt deps
+
+    - name: Generate dbt Docs
+      run: dbt docs generate
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GH_PAT }}
+        publish_dir: ./target
+        publish_branch: gh-pages  # Ensure this branch is set up for GitHub Pages
