@@ -1,3 +1,5 @@
+
+
 WITH calendar_data AS (
     SELECT
         listing_id,
@@ -6,7 +8,10 @@ WITH calendar_data AS (
         price,
         adjusted_price
     FROM AIRBNB.PROD.stg_calendar
+    
+    
 ),
+
 aggregated_bookings AS (
     SELECT
         listing_id,
@@ -21,6 +26,7 @@ aggregated_bookings AS (
     FROM calendar_data
     GROUP BY listing_id
 )
+
 SELECT
     ab.listing_id,
     dl.host_id,
