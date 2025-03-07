@@ -18,6 +18,9 @@ aggregated_availability AS (
         (SUM(CASE WHEN available = 'f' THEN 1 ELSE 0 END) * 1.0 / NULLIF(COUNT(*), 0)) AS occupancy_rate
     FROM calendar_data
     
+    -- Only process new data for incremental runs
+    WHERE availability_date > (SELECT MAX(availability_date) FROM AIRBNB.PROD.fact_availability_trends)
+    
     GROUP BY listing_id, availability_date
 )
 

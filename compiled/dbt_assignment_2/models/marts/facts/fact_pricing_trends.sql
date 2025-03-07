@@ -7,6 +7,8 @@ WITH daily_prices AS (
         COALESCE(NULLIF(adjusted_price, 0), price) AS final_price
     FROM AIRBNB.PROD.stg_calendar
     
+    WHERE date > (SELECT MAX(pricing_date) FROM AIRBNB.PROD.fact_pricing_trends)  -- Only process new data
+    
 ),
 price_trends AS (
     SELECT

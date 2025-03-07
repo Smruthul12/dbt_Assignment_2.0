@@ -10,6 +10,9 @@ WITH calendar_data AS (
     FROM AIRBNB.PROD.stg_calendar
     
     
+    -- Only fetch new or updated records
+    WHERE date >= (SELECT MAX(updated_date) FROM AIRBNB.PROD.fact_bookings)
+    
 ),
 
 aggregated_bookings AS (
