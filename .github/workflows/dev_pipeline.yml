@@ -1,4 +1,4 @@
-name: "DBT CI/CD Pipeline"
+name: "Development CI/CD Pipeline"
 
 on:
   push:

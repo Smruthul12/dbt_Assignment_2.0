@@ -32,8 +32,30 @@ models:
   airbnb:
     staging:
       +materialized: table
+      pre-hook:
+        - "INSERT INTO dbt_audit_log (model_name, execution_time, status, run_by) VALUES ('{{ this }}', CURRENT_TIMESTAMP, 'STARTED', CURRENT_USER());"
+      post-hook:
+        - "INSERT INTO dbt_audit_log (model_name, execution_time, status, run_by) VALUES ('{{ this }}', CURRENT_TIMESTAMP, 'COMPLETED', CURRENT_USER());"    
+
     marts:
       dimensions:
         +materialized: table
+      pre-hook:
+        - "INSERT INTO dbt_audit_log (model_name, execution_time, status, run_by) VALUES ('{{ this }}', CURRENT_TIMESTAMP, 'STARTED', CURRENT_USER());"
+      post-hook:
+        - "INSERT INTO dbt_audit_log (model_name, execution_time, status, run_by) VALUES ('{{ this }}', CURRENT_TIMESTAMP, 'COMPLETED', CURRENT_USER());"    
+ 
       facts:
         +materialized: incremental
+      pre-hook:
+        - "INSERT INTO dbt_audit_log (model_name, execution_time, status, run_by) VALUES ('{{ this }}', CURRENT_TIMESTAMP, 'STARTED', CURRENT_USER());"
+      post-hook:
+        - "INSERT INTO dbt_audit_log (model_name, execution_time, status, run_by) VALUES ('{{ this }}', CURRENT_TIMESTAMP, 'COMPLETED', CURRENT_USER());"    
+ 
+    final:
+      +materialized: table    
+      pre-hook:
+        - "INSERT INTO dbt_audit_log (model_name, execution_time, status, run_by) VALUES ('{{ this }}', CURRENT_TIMESTAMP, 'STARTED', CURRENT_USER());"
+      post-hook:
+        - "INSERT INTO dbt_audit_log (model_name, execution_time, status, run_by) VALUES ('{{ this }}', CURRENT_TIMESTAMP, 'COMPLETED', CURRENT_USER());"    
+ 

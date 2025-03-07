@@ -1,4 +1,4 @@
-name: "DBT Scheduled Run"
+name: "Development Scheduled Run"
 
 on:
   schedule:
