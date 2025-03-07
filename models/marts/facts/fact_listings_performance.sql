@@ -1,3 +1,8 @@
+{{ 
+    config(
+        cluster_by=['listing_id'] 
+    ) 
+}}
 WITH bookings AS (
     SELECT 
         listing_id,

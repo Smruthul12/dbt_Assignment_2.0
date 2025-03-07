@@ -1,3 +1,11 @@
+{{ 
+    config(
+        materialized='incremental',
+        unique_key='listing_id',
+        cluster_by=['listing_id', 'pricing_date']
+    ) 
+}}
+
 WITH daily_prices AS (
     SELECT
         listing_id,

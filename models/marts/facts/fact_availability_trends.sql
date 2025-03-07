@@ -1,3 +1,11 @@
+{{ 
+    config(
+        materialized='incremental',
+        unique_key='listing_id',
+        cluster_by=['listing_id']
+    ) 
+}}
+
 WITH calendar_data AS (
     SELECT
         listing_id,
