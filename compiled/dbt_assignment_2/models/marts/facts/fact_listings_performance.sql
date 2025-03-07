@@ -1,3 +1,4 @@
+
 WITH bookings AS (
     SELECT 
         listing_id,

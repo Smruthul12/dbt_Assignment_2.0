@@ -1,3 +1,5 @@
+
+
 WITH calendar_data AS (
     SELECT
         listing_id,

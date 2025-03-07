@@ -1,3 +1,5 @@
+
+
 SELECT
     listing_id,
     host_id,

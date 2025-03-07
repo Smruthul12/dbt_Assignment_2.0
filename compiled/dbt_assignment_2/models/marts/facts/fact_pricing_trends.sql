@@ -1,3 +1,5 @@
+
+
 WITH daily_prices AS (
     SELECT
         listing_id,
