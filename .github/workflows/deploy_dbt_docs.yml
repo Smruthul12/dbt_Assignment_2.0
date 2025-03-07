@@ -27,18 +27,18 @@ jobs:
         mkdir -p ~/.dbt
         echo "${{ secrets.DBT_PROFILES }}" > ~/.dbt/profiles.yml
 
-    - name: Validate dbt Connection
-      run: dbt debug --target dev
+    - name: Validate dbt Connection (Production)
+      run: dbt debug --target prod  # Ensures connection to production schema
 
     - name: Install dbt Dependencies
       run: dbt deps
 
-    - name: Generate dbt Docs
-      run: dbt docs generate
+    - name: Generate dbt Docs (Production)
+      run: dbt docs generate --target prod
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GH_PAT }}
         publish_dir: ./target
-        publish_branch: gh-pages  
+        publish_branch: gh-pages  # Ensure this is enabled in repo settings
